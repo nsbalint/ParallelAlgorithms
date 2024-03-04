@@ -4,9 +4,7 @@
 
 int main()
 {
-    int lower;
-    int upper;
-    int random;
+    int lower, upper, random;
     srand(time(NULL));
 
     lower = rand();
