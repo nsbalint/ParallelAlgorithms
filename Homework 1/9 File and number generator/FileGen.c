@@ -4,22 +4,22 @@
 int main()
 {
     char str[100];
-    int piece;
+    int numberCount;
 
     printf("Give me the file name: ");
     scanf("%[^\n]s", str);
-    printf("Number of random numbers generated: ");
-    scanf("%d", &piece);
+    printf("Number of random numbers you wish to generate: ");
+    scanf("%d", &numberCount);
 
     FILE *file;
     file = fopen(str, "w");
 
     srand(time(NULL));
     clock_t begin = clock();
-    for (int i = 0; i < piece; i++)
+    for (int i = 0; i < numberCount; i++)
     {
-        int szam = (rand() % (1000 - 500 + 1)) + 500;
-        fprintf(file, "%d ", szam);
+        int num = (rand() % (1000 - 500 + 1)) + 500;
+        fprintf(file, "%d ", num);
     }
     clock_t end_time = clock();
     fclose(file);
