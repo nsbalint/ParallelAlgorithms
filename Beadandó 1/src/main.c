@@ -1,4 +1,4 @@
-#include "sortAlgorithm.c"
+#include "../include/sortAlgorithm.h"
 
 int main()
 {
@@ -7,7 +7,7 @@ int main()
     printf("Enter the size of the array: ");
     scanf("%d", &size);
 
-    printf("Enter the number of threads (1 to %d): ", size);
+    printf("Enter the number of threads (1 to 32): ");
     scanf("%d", &num_threads);
 
     if (num_threads < 1 || num_threads > size)

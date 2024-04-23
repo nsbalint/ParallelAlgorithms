@@ -1,8 +1,3 @@
 {
-  "files.associations": {
-    "*.rmd": "markdown",
-    "stdlib.h": "c",
-    "pthread.h": "c"
-  },
   "C_Cpp.errorSquiggles": "enabled"
 }
