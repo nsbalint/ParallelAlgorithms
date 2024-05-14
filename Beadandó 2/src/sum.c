@@ -34,7 +34,6 @@ void pthreads_sum(int n, int num_threads)
     printf("Pthreads Sum: %.0f\n", total_sum);
 }
 
-// OpenMP version
 void omp_sum(int n, int num_threads)
 {
     double sum = 0.0;
@@ -46,7 +45,6 @@ void omp_sum(int n, int num_threads)
     printf("OpenMP Sum: %.0f\n", sum);
 }
 
-// Sequential version
 void sequential_sum(int n)
 {
     double sum = 0.0;

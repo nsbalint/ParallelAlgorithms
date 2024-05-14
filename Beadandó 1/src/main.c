@@ -17,12 +17,12 @@ int main()
     }
 
     int *arr = (int *)malloc(size * sizeof(int));
-    int *arr_seq = (int *)malloc(size * sizeof(int)); // Sequential sort array
+    int *arr_seq = (int *)malloc(size * sizeof(int));
     srand(time(NULL));
     for (int i = 0; i < size; i++)
     {
         arr[i] = rand() % 100000;
-        arr_seq[i] = arr[i]; // Copying array for sequential sort
+        arr_seq[i] = arr[i];
     }
 
     clock_t start_time, end_time;
@@ -41,7 +41,6 @@ int main()
     display(arr, size);
     printf("Time taken: %.6f seconds\n", total_time);
 
-    // Sequential Merge Sort
     printf("\nSequential Merge Sort:\n");
     start_time = clock();
 

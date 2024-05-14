@@ -7,7 +7,6 @@
 #include <pthread.h>
 #include <time.h>
 
-// Pthreads version
 typedef struct
 {
     double partial_sum;
