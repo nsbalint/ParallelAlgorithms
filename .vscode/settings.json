@@ -1,3 +1,14 @@
 {
-  "C_Cpp.errorSquiggles": "enabled"
+  "C_Cpp.errorSquiggles": "enabled",
+  "files.associations": {
+    "*.rmd": "markdown",
+    "sdl_ttf.h": "c",
+    "stdlib.h": "c",
+    "pthread.h": "c",
+    "stdio.h": "c",
+    "tut.h": "c",
+    "freeglut.h": "c",
+    "freeglut_std.h": "c",
+    "sortalgorithm.h": "c"
+  }
 }

@@ -1,4 +1,4 @@
-#include "../include/sortAlgorithm.h"
+#include "../include/sort.h"
 
 int main()
 {
@@ -17,53 +17,45 @@ int main()
     }
 
     int *arr = (int *)malloc(size * sizeof(int));
+    int *arr_seq = (int *)malloc(size * sizeof(int)); // Sequential sort array
     srand(time(NULL));
     for (int i = 0; i < size; i++)
     {
         arr[i] = rand() % 100000;
+        arr_seq[i] = arr[i]; // Copying array for sequential sort
     }
 
-    clock_t start_time = clock();
+    clock_t start_time, end_time;
+    double total_time;
 
-    pthread_t threads[num_threads];
-    int params[num_threads][3];
+    // Threaded Merge Sort
+    printf("\nThreaded Merge Sort:\n");
+    start_time = clock();
 
-    int part_size = size / num_threads;
-    for (int i = 0; i < num_threads; i++)
-    {
-        int low = i * part_size;
-        int high = (i == num_threads - 1) ? (size - 1) : (low + part_size - 1);
+    threaded_merge_sort(arr, size, num_threads);
 
-        params[i][0] = (int)arr;
-        params[i][1] = low;
-        params[i][2] = high;
-
-        pthread_create(&threads[i], NULL, thread_merge_sort, (void *)params[i]);
-    }
-
-    for (int i = 0; i < num_threads; i++)
-    {
-        pthread_join(threads[i], NULL);
-    }
-
-    for (int i = 1; i < num_threads; i++)
-    {
-        merge(arr, 0, (i * part_size) - 1, (i + 1) * part_size - 1);
-    }
-
-    clock_t end_time = clock();
-    double total_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    end_time = clock();
+    total_time = execution_time(start_time, end_time);
 
     printf("Sorted array: ");
-    for (int i = 0; i < size; i++)
-    {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
+    display(arr, size);
+    printf("Time taken: %.6f seconds\n", total_time);
 
+    // Sequential Merge Sort
+    printf("\nSequential Merge Sort:\n");
+    start_time = clock();
+
+    merge_sort(arr_seq, 0, size - 1);
+
+    end_time = clock();
+    total_time = execution_time(start_time, end_time);
+
+    printf("Sorted array: ");
+    display(arr_seq, size);
     printf("Time taken: %.6f seconds\n", total_time);
 
     free(arr);
+    free(arr_seq);
 
     return 0;
 }
