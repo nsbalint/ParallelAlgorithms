@@ -16,8 +16,8 @@ Egy user által bekért szám 1:n-ig történő összeadása. A user adja meg ez
 Gauss elimináció kiszámítása. Terminálból a lefordítás után, a user argumentumként adhatja meg a mátrix nagyságát, egy szövegfájlt amiben az értékeket, és a számítás gyorsaságát letárolja a rendszer, legutolsó sorban pedig az optimizációként, hogy hány szálon fusson az adott program.
 
 ### Futtatás terminálból:
-  javac GaussElimination.java
-  java GaussElimination.java <mátrix nagysága> <kimenő fájl neve> <szálak száma>
+    javac GaussElimination.java
+    java GaussElimination.java <mátrix nagysága> <kimenő fájl neve> <szálak száma>
 
 
 
