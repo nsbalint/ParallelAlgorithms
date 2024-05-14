@@ -18,19 +18,13 @@ public class GaussElimination {
         String outputFile = args[1];
         int threadCount = Integer.parseInt(args[2]);
 
-        // Initialize matrix with random numbers
         double[][] matrix = initializeMatrix(size);
-
-        // Measure time for Gaussian Elimination
         long startTime = System.currentTimeMillis();
-
-        // Perform Gaussian Elimination
         double[] result = gaussianElimination(matrix, threadCount);
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
-        // Write results to output file
         writeResultsToFile(outputFile, matrix, result, executionTime);
 
         System.out.println("Results written to " + outputFile);
@@ -50,7 +44,6 @@ public class GaussElimination {
         int size = matrix.length;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
-        // Forward elimination
         for (int i = 0; i < size - 1; i++) {
             for (int j = i + 1; j < size; j++) {
                 executor.execute(new ForwardEliminationTask(matrix, i, j, size));
@@ -64,7 +57,7 @@ public class GaussElimination {
             e.printStackTrace();
         }
 
-        // Back substitution
+
         double[] result = new double[size];
         for (int i = size - 1; i >= 0; i--) {
             double sum = 0.0;
