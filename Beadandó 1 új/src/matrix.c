@@ -10,36 +10,42 @@
 int matA[MAX][MAX];
 int matB[MAX][MAX];
 int matC[MAX][MAX];
-int step_i = 0;
 
 typedef struct
 {
-    int i;
+    int start_row;
+    int end_row;
 } thread_args;
 
 void *worker(void *arg)
 {
     thread_args *args = (thread_args *)arg;
-    int i = args->i;
-    for (int j = 0; j < MAX; j++)
+    int start_row = args->start_row;
+    int end_row = args->end_row;
+
+    for (int i = start_row; i < end_row; i++)
     {
-        for (int k = 0; k < MAX; k++)
+        for (int j = 0; j < MAX; j++)
         {
-            matC[i][j] += matA[i][k] * matB[k][j];
+            matC[i][j] = 0; // Initialize the element to 0
+            for (int k = 0; k < MAX; k++)
+            {
+                matC[i][j] += matA[i][k] * matB[k][j];
+            }
         }
     }
     free(args);
     pthread_exit(NULL);
 }
 
-bool checkMatrixMultiplication(int matA[][MAX], int matB[][MAX], int matC[][MAX])
+bool checkMatrixMultiplication(int matA[][MAX], int matB[][MAX], int matC[][MAX], int size)
 {
-    for (int i = 0; i < MAX; i++)
+    for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < MAX; j++)
+        for (int j = 0; j < size; j++)
         {
             int sum = 0;
-            for (int k = 0; k < MAX; k++)
+            for (int k = 0; k < size; k++)
             {
                 sum += matA[i][k] * matB[k][j];
             }
@@ -66,7 +72,7 @@ int main()
     }
     if (user_max <= 0)
     {
-        printf("Input cant be 0 or less.");
+        printf("Input can't be 0 or less.\n");
         return 0;
     }
 
@@ -79,12 +85,11 @@ int main()
     }
     if (user_max_threads <= 0)
     {
-        printf("Input cant be 0 or less.");
+        printf("Input can't be 0 or less.\n");
         return 0;
     }
 
-    // Generating random values in matA and matB
-    for (int i = 0; i < user_max; i++)
+        for (int i = 0; i < user_max; i++)
     {
         for (int j = 0; j < user_max; j++)
         {
@@ -115,11 +120,17 @@ int main()
 
     clock_t start = clock();
     pthread_t threads[user_max_threads];
+    int rows_per_thread = user_max / user_max_threads;
 
     for (int i = 0; i < user_max_threads; i++)
     {
         thread_args *args = (thread_args *)malloc(sizeof(thread_args));
-        args->i = step_i++;
+        args->start_row = i * rows_per_thread;
+        args->end_row = (i + 1) * rows_per_thread;
+        if (i == user_max_threads - 1)
+        {
+            args->end_row = user_max;
+        }
         pthread_create(&threads[i], NULL, worker, (void *)args);
     }
 
@@ -141,7 +152,7 @@ int main()
         printf("\n");
     }
 
-    if (checkMatrixMultiplication(matA, matB, matC))
+    if (checkMatrixMultiplication(matA, matB, matC, user_max))
         printf("Multiplication correct\n");
     else
         printf("Multiplication incorrect\n");
