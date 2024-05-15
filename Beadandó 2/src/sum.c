@@ -10,7 +10,7 @@ void *pthread_sum(void *arg)
     return NULL;
 }
 
-void pthreads_sum(int n, int num_threads)
+double pthreads_sum(int n, int num_threads)
 {
     pthread_t threads[num_threads];
     ThreadData thread_data[num_threads];
@@ -31,10 +31,10 @@ void pthreads_sum(int n, int num_threads)
         total_sum += thread_data[i].partial_sum;
     }
 
-    printf("Pthreads Sum: %.0f\n", total_sum);
+    return total_sum;
 }
 
-void omp_sum(int n, int num_threads)
+double omp_sum(int n, int num_threads)
 {
     double sum = 0.0;
 #pragma omp parallel for reduction(+ : sum) num_threads(num_threads)
@@ -42,15 +42,32 @@ void omp_sum(int n, int num_threads)
     {
         sum += i;
     }
-    printf("OpenMP Sum: %.0f\n", sum);
+    return sum;
 }
 
-void sequential_sum(int n)
+double sequential_sum(int n)
 {
     double sum = 0.0;
     for (int i = 1; i <= n; i++)
     {
         sum += i;
     }
-    printf("Sequential Sum: %.0f\n", sum);
+    return sum;
+}
+
+void print_sum(double sum)
+{
+    printf("%lf\n", sum);
+}
+
+bool is_sum_correct(int n, double sum)
+{
+    // Calculate the expected sum of integers from 1 to n
+    double expected_sum = (n * (n + 1)) / 2;
+    printf("Expected sum: %lf\n", expected_sum);
+    // Compare the calculated sum with the expected sum
+    if (expected_sum == sum)
+        return true;
+    else
+        return false;
 }

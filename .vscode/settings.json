@@ -9,6 +9,7 @@
     "tut.h": "c",
     "freeglut.h": "c",
     "freeglut_std.h": "c",
-    "sortalgorithm.h": "c"
+    "sortalgorithm.h": "c",
+    "time.h": "c"
   }
 }

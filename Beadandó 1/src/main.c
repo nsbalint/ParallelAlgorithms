@@ -53,6 +53,16 @@ int main()
     display(arr_seq, size);
     printf("Time taken: %.6f seconds\n", total_time);
 
+    printf("\nSorting correctness check:\n");
+    if (isSorted(arr, size))
+    {
+        printf("Array is sorted.\n");
+    }
+    else
+    {
+        printf("Array is not sorted.\n");
+    }
+
     free(arr);
     free(arr_seq);
 

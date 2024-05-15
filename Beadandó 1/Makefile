@@ -1,4 +1,4 @@
-gcc:
-	gcc -pthread -o sortAlgorithm -Linclude/ src/sortAlgorithm.c src/main.c
+build:
+	gcc -pthread -o sortAlgorithm.exe -Linclude/ src/sortAlgorithm.c src/main.c
 run:
-	./sortAlgorithm
+	./sortAlgorithm.exe

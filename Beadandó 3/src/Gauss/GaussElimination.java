@@ -13,21 +13,26 @@ public class GaussElimination {
             System.out.println("Usage: java GaussElimination <matrix size> <output file> <thread count>");
             return;
         }
-
         int size = Integer.parseInt(args[0]);
         String outputFile = args[1];
         int threadCount = Integer.parseInt(args[2]);
 
         double[][] matrix = initializeMatrix(size);
+
         long startTime = System.currentTimeMillis();
         double[] result = gaussianElimination(matrix, threadCount);
-
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
         writeResultsToFile(outputFile, matrix, result, executionTime);
 
         System.out.println("Results written to " + outputFile);
+
+        if (checkSolution(matrix, result)) {
+            System.out.println("Solution verified: The result vector satisfies the original equations.");
+        } else {
+            System.out.println("Solution verification failed: The result vector does not satisfy the original equations.");
+        }
     }
 
     private static double[][] initializeMatrix(int size) {
@@ -41,12 +46,13 @@ public class GaussElimination {
     }
 
     private static double[] gaussianElimination(double[][] matrix, int threadCount) {
-        int size = matrix.length;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        int size = matrix.length;
 
+        // Forward elimination
         for (int i = 0; i < size - 1; i++) {
             for (int j = i + 1; j < size; j++) {
-                executor.execute(new ForwardEliminationTask(matrix, i, j, size));
+                executor.execute(new ForwardEliminationTask(matrix, i, j));
             }
         }
 
@@ -57,14 +63,13 @@ public class GaussElimination {
             e.printStackTrace();
         }
 
-
         double[] result = new double[size];
         for (int i = size - 1; i >= 0; i--) {
-            double sum = 0.0;
+            double sum = matrix[i][size];
             for (int j = i + 1; j < size; j++) {
-                sum += matrix[i][j] * result[j];
+                sum -= matrix[i][j] * result[j];
             }
-            result[i] = (matrix[i][size] - sum) / matrix[i][i];
+            result[i] = sum / matrix[i][i];
         }
 
         return result;
@@ -81,7 +86,7 @@ public class GaussElimination {
             e.printStackTrace();
         }
     }
-
+    
     private static String matrixToString(double[][] matrix) {
         StringBuilder sb = new StringBuilder();
         for (double[] row : matrix) {
@@ -93,23 +98,42 @@ public class GaussElimination {
         return sb.toString();
     }
 
+    private static boolean checkSolution(double[][] matrix, double[] result) {
+    	   int size = matrix.length;
+           double[] calculatedResult = new double[size];
+
+           for (int i = 0; i < size; i++) {
+               double sum = 0.0;
+               for (int j = 0; j < size; j++) {
+                   sum += matrix[i][j] * result[j];
+               }
+               calculatedResult[i] = sum;
+           }
+
+           for (int i = 0; i < size; i++) {
+               if (Math.abs(calculatedResult[i] - matrix[i][size]) > 1e+2) {
+                   return false; 
+               }
+           }
+
+           return true;
+    }
+
     private static class ForwardEliminationTask implements Runnable {
         private final double[][] matrix;
         private final int i;
         private final int j;
-        private final int size;
 
-        public ForwardEliminationTask(double[][] matrix, int i, int j, int size) {
+        public ForwardEliminationTask(double[][] matrix, int i, int j) {
             this.matrix = matrix;
             this.i = i;
             this.j = j;
-            this.size = size;
         }
 
         public void run() {
-            double ratio = matrix[j][i] / matrix[i][i];
-            for (int k = i; k < size + 1; k++) {
-                matrix[j][k] -= ratio * matrix[i][k];
+            double factor = matrix[j][i] / matrix[i][i];
+            for (int k = i; k < matrix[0].length; k++) {
+                matrix[j][k] -= factor * matrix[i][k];
             }
         }
     }

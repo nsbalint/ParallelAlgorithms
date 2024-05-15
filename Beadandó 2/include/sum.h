@@ -6,6 +6,7 @@
 #include <omp.h>
 #include <pthread.h>
 #include <time.h>
+#include <stdbool.h>
 
 typedef struct
 {
@@ -14,8 +15,10 @@ typedef struct
     int end;
 } ThreadData;
 
-void omp_sum(int n, int num_threads);
-void pthreads_sum(int n, int num_threads);
-void sequential_sum(int n);
+double omp_sum(int n, int num_threads);
+double pthreads_sum(int n, int num_threads);
+double sequential_sum(int n);
+void print_sum(double sum);
+bool is_sum_correct(int n, double sum);
 
 #endif /* SUM_H */
